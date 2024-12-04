@@ -13,32 +13,12 @@
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
+// TO REMOVE @TODO
+#include <stdio.h>
 
-/**
- * @brief Create a copy of source into a new pointer of size len
- *	NEEDS to be freed
- * @param source
- * @return char*
- */
-char	*ft_strndup(const char *source, size_t len)
-{
-	char	*pointer;
-	size_t	index;
-
-	pointer = malloc(sizeof(char) * (len + 1));
-	if (pointer == NULL)
-		return (NULL);
-	index = 0;
-	while (index < len)
-	{
-		pointer[index] = source[index];
-		index++;
-	}
-	pointer[len] = '\0';
-	return (pointer);
-}
-
-#include <string.h>
+char	*ft_filler(int fd, char *backup);
+char	*ft_store_for_next_use(char *save);
+char	*ft_make_line(char *save);
 
 /**
  * @brief Get the next line of a file descriptor
@@ -48,38 +28,103 @@ char	*ft_strndup(const char *source, size_t len)
  */
 char	*get_next_line(int fd)
 {
-	char		ptr[BUFFER_SIZE + 1];
-	static char	ptr2[BUFFER_SIZE + 1];
-	size_t		index;
+	static char	*memory;
+	char		*line;
 
-	index = 0;
-	read(fd, ptr, BUFFER_SIZE);
-	while (ptr[index] != '\0' && ptr[index] != '\n')
-		index++;
-	memcpy(ptr2, &ptr[index], BUFFER_SIZE - index);
-	return (ft_strndup(ptr, index));
-	// verify fd
-	// remplir stock
-	// checker buffer size <= 0
-	// return (NULL), si erreur, ou fichier finis
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	memory = ft_filler(fd, memory);
+	if (memory == NULL)
+		return (free(memory), NULL);
+	line = ft_make_line(memory);
+	memory = ft_store_for_next_use(memory);
+	return (line);
 }
 
-#include <fcntl.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-int	main(void)
+/**
+ * @brief Main function that fills 'backup', and stops if \n is detected
+ * after read of fixed size at compilation (default is 42 bytes)
+ * 
+ * @param fd 
+ * @param backup 
+ * @return char* 
+ */
+char	*ft_filler(int fd, char *backup)
 {
-	int		fd;
-	char	*handler;
+	int		read_return;
+	char	*buffer;
 
-	fd = open("test.txt", O_RDONLY);
-	if (fd < 0)
-		return (-1);
-	do
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (free(buffer), NULL);
+	read_return = 1;
+	while (read_return != 0)
 	{
-		handler = get_next_line(fd);
-		printf("%s\n", handler);
-	} while (handler != NULL);
+		read_return = read(fd, buffer, BUFFER_SIZE);
+		if (read_return == -1)
+			return (free(buffer), free(backup), NULL);
+		buffer[read_return] = '\0';
+		backup = ft_strjoin(backup, buffer);
+		if (ft_strchr(backup, '\n'))
+			break ;
+	}
+	free(buffer);
+	return (backup);
+}
+
+/**
+ * @brief Build a new array with the save
+ * 
+ * @param save 
+ * @return char* 
+ */
+char	*ft_make_line(char *save)
+{
+	int		i;
+	char	*line;
+
+	if (save == NULL || save[0] == '\0')
+		return (NULL);
+	i = ft_strlen_until(save, '\n');
+	line = (char *)malloc(sizeof(char) * (i + 2));
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (save[i] != '\0' && save[i] != '\n')
+	{
+		line[i] = save[i];
+		i++;
+	}
+	if (save[i] == '\n')
+		line[i++] = '\n';
+	line[i] = '\0';
+	return (line);
+}
+
+/**
+ * @brief Store the rest of the array that has been unused
+ * 
+ * @param save 
+ * @return char* 
+ */
+char	*ft_store_for_next_use(char *save)
+{
+	int		index;
+	int		rest;
+	char	*new_save;
+
+	index = ft_strlen_until(save, '\n');
+	if (save[index] == '\0' || save[index + 1] == '\0')
+		return (free(save), NULL);
+	rest = ft_strlen_until(save, '\0') - index;
+	new_save = (char *)malloc(sizeof(char) * (rest));
+	if (new_save == NULL)
+		return (free(save), NULL);
+	index++;
+	rest = 0;
+	while (save[index] != '\0')
+		new_save[rest++] = save[index++];
+	new_save[rest] = '\0';
+	free(save);
+	return (new_save);
 }

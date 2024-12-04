@@ -13,20 +13,16 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
+# include <stddef.h>
+
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
 
-typedef struct s_block
-{
-	void			*content;
-	struct s_block	*next;
-}					t_block;
+char	*get_next_line(int fd);
 
-typedef struct s_memory
-{
-	int				fd;
-	t_block			**block;
-}					t_memory;
+size_t	ft_strlen_until(const char *string, char to_find);
+char	*ft_strchr(const char *string, int searched_char);
+char	*ft_strjoin(char *s1, char const *s2);
 
 #endif
