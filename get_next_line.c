@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:12:58 by ppontet           #+#    #+#             */
-/*   Updated: 2024/11/27 18:26:26 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/05 14:57:20 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,29 +44,29 @@ char	*get_next_line(int fd)
 /**
  * @brief Main function that fills 'backup', and stops if \n is detected
  * after read of fixed size at compilation (default is 42 bytes)
- * 
- * @param fd 
- * @param backup 
- * @return char* 
+ *
+ * @param fd
+ * @param backup
+ * @return char*
  */
 char	*ft_filler(int fd, char *backup)
 {
-	int		read_return;
 	char	*buffer;
+	ssize_t	read_return;
 
+	if (ft_strchr(backup, '\n') != NULL)
+		return (backup);
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (free(buffer), NULL);
 	read_return = 1;
-	while (read_return != 0)
+	while (ft_strchr(backup, '\n') == NULL && read_return != 0)
 	{
 		read_return = read(fd, buffer, BUFFER_SIZE);
 		if (read_return == -1)
 			return (free(buffer), free(backup), NULL);
 		buffer[read_return] = '\0';
 		backup = ft_strjoin(backup, buffer);
-		if (ft_strchr(backup, '\n'))
-			break ;
 	}
 	free(buffer);
 	return (backup);
@@ -74,9 +74,9 @@ char	*ft_filler(int fd, char *backup)
 
 /**
  * @brief Build a new array with the save
- * 
- * @param save 
- * @return char* 
+ *
+ * @param save
+ * @return char*
  */
 char	*ft_make_line(char *save)
 {
@@ -103,9 +103,9 @@ char	*ft_make_line(char *save)
 
 /**
  * @brief Store the rest of the array that has been unused
- * 
- * @param save 
- * @return char* 
+ *
+ * @param save
+ * @return char*
  */
 char	*ft_store_for_next_use(char *save)
 {
