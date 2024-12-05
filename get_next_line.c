@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:12:58 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/05 14:57:20 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/05 17:59:38 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	memory = ft_filler(fd, memory);
 	if (memory == NULL)
-		return (free(memory), NULL);
+		return (NULL);
 	line = ft_make_line(memory);
 	memory = ft_store_for_next_use(memory);
 	return (line);
@@ -67,6 +67,8 @@ char	*ft_filler(int fd, char *backup)
 			return (free(buffer), free(backup), NULL);
 		buffer[read_return] = '\0';
 		backup = ft_strjoin(backup, buffer);
+		if (backup == NULL)
+			return(NULL);
 	}
 	free(buffer);
 	return (backup);
