@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:13:04 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/05 14:47:24 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/10 11:03:26 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,16 @@ char	*ft_strchr(const char *string, int searched_char)
 char	*ft_strjoin(char *s1, char const *s2)
 {
 	char	*pointer;
-	size_t	s1_len;
 	size_t	s2_len;
-
+	
+	s2_len = ft_strlen_until(s2, '\0');
 	if (s1 == NULL)
 	{
-		s1 = malloc(1);
+		s1 = malloc(s2_len);
 		if (s1 == NULL)
 			return (NULL);
-		s1[0] = '\0';
 	}
-	if (s2 == NULL)
-		return (NULL);
-	s1_len = ft_strlen_until(s1, '\0');
-	s2_len = ft_strlen_until(s2, '\0');
-	pointer = malloc(s1_len + s2_len + 1);
+	pointer = malloc(ft_strlen_until(s1, '\0') + s2_len + 1);
 	if (pointer == NULL)
 		return (free(s1), NULL);
 	pointer = ft_cpy_cat(pointer, s1, s2);
