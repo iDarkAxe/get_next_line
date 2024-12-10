@@ -6,19 +6,16 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:12:58 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/10 11:27:19 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/10 15:56:58 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
-// TO REMOVE @TODO
-#include <stdio.h>
 
 char	*ft_filler(int fd, char *backup);
-char	*ft_store_for_next_use(char *save);
-char	*ft_make_line(char *line, char *backup);
+char	*ft_make_line(char *buffer, char *backup);
 
 /**
  * @brief Get the next line of a file descriptor
@@ -28,14 +25,14 @@ char	*ft_make_line(char *line, char *backup);
  */
 char	*get_next_line(int fd)
 {
-	static char	memory[BUFFER_SIZE + 1] = {0};
+	static char	backup[BUFFER_SIZE + 1] = {0};
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = ft_filler(fd, memory);
-	if (line == NULL)
-		return (NULL);
+	line = ft_filler(fd, backup);
+	if (line == NULL || line[0] == '\0')
+		return (free(line), NULL);
 	return (line);
 }
 
@@ -52,58 +49,58 @@ char	*ft_filler(int fd, char *backup)
 	char	*buffer;
 	ssize_t	read_return;
 
-	if (backup[0] != '\0' && 0)
-		buffer = ft_strjoin(0, backup);
-	else	
-		buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (buffer == NULL)
 		return (NULL);
+	buffer[0] = '\0';
 	read_return = 1;
-	while (read_return != 0)
+	while (read_return > 0)
 	{
-		read_return = read(fd, backup, BUFFER_SIZE);
-		if (read_return == -1)
-			return (free(buffer), NULL);
-		backup[read_return] = '\0';
+		if (backup[0] == '\0')
+		{
+			read_return = read(fd, backup, BUFFER_SIZE);
+			if (read_return < 0)
+				return (free(buffer), NULL);
+			backup[read_return] = '\0';
+		}
 		buffer = ft_strjoin(buffer, backup);
-		backup[0] = '\0';
-		if (buffer == NULL)
-			return(NULL);
-		if (ft_strchr(buffer, '\n') != NULL)
+		if (ft_strchr(buffer, '\n'))
 			return (ft_make_line(buffer, backup));
+		backup[0] = '\0';
 	}
 	return (buffer);
 }
 
 /**
- * @brief Build a new array with the save
+ * @brief Build a new array containing the new line
+ * and stores the rest of buffer into backup
  *
  * @param save
  * @return char*
  */
-char	*ft_make_line(char *line, char *backup)
+char	*ft_make_line(char *buffer, char *backup)
 {
 	size_t	i;
-	size_t	backup_size;
-	char	*new_line;
+	size_t	j;
+	char	*line;
 
-	if (line == NULL || line[0] == '\0')
-		return (NULL);
-	new_line = malloc(sizeof(char) * (ft_strlen_until(line, '\n') + 2));
-	if (!new_line)
-		return (NULL);
 	i = 0;
-	while (line[i] != '\0' && line[i] != '\n')
-	{
-		new_line[i] = line[i];
+	while (buffer[i] != '\0' && buffer[i] != '\n')
 		i++;
+	line = malloc(sizeof(char) * (i + 2));
+	if (!line)
+		return (NULL);
+	j = 0;
+	while (j <= i)
+	{
+		line[j] = buffer[j];
+		j++;
 	}
-	if (line[i] == '\n')
-		new_line[i++] = '\n';
-	new_line[i] = '\0';
-	backup_size = ft_strlen_until(backup, '\0');
-	while (line[i] != '\0' && backup_size + i <= BUFFER_SIZE)
-		backup[backup_size + i] = line[i];
-	backup[backup_size + i] = '\0';
-	return (new_line);
+	line[j] = '\0';
+	i = 0;
+	while (buffer[j] != '\0')
+		backup[i++] = buffer[j++];
+	backup[i] = '\0';
+	free(buffer);
+	return (line);
 }

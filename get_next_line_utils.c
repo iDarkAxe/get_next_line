@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:13:04 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/10 11:03:26 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/10 13:23:45 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*ft_strjoin(char *s1, char const *s2)
 {
 	char	*pointer;
 	size_t	s2_len;
-	
+
 	s2_len = ft_strlen_until(s2, '\0');
 	if (s1 == NULL)
 	{
