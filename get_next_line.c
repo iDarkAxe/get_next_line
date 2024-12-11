@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:12:58 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/10 15:56:58 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/11 15:05:30 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,8 @@ char	*ft_filler(int fd, char *backup)
 	char	*buffer;
 	ssize_t	read_return;
 
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (buffer == NULL)
-		return (NULL);
-	buffer[0] = '\0';
 	read_return = 1;
+	buffer = NULL;
 	while (read_return > 0)
 	{
 		if (backup[0] == '\0')
@@ -64,9 +61,11 @@ char	*ft_filler(int fd, char *backup)
 			backup[read_return] = '\0';
 		}
 		buffer = ft_strjoin(buffer, backup);
+		if (buffer == NULL)
+			return (NULL);
+		backup[0] = '\0';
 		if (ft_strchr(buffer, '\n'))
 			return (ft_make_line(buffer, backup));
-		backup[0] = '\0';
 	}
 	return (buffer);
 }
@@ -89,7 +88,7 @@ char	*ft_make_line(char *buffer, char *backup)
 		i++;
 	line = malloc(sizeof(char) * (i + 2));
 	if (!line)
-		return (NULL);
+		return (free(buffer), NULL);
 	j = 0;
 	while (j <= i)
 	{

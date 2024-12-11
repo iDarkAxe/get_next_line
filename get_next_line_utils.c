@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:13:04 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/10 13:23:45 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/11 14:12:16 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,10 @@ char	*ft_strjoin(char *s1, char const *s2)
 	s2_len = ft_strlen_until(s2, '\0');
 	if (s1 == NULL)
 	{
-		s1 = malloc(s2_len);
+		s1 = malloc(sizeof(char));
 		if (s1 == NULL)
 			return (NULL);
+		s1[0] = '\0';
 	}
 	pointer = malloc(ft_strlen_until(s1, '\0') + s2_len + 1);
 	if (pointer == NULL)

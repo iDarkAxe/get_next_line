@@ -6,14 +6,34 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:11:55 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/10 17:35:07 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/11 14:49:06 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include <stdlib.h>
 
-static char	*ft_cpy_cat(char *pointer, char const *s1, char const *s2);
+static char	*ft_cpy_cat(char *pointer, char const *s1, char const *s2)
+{
+	size_t	index;
+	size_t	s1_len;
+
+	index = 0;
+	while (s1[index] != '\0')
+	{
+		pointer[index] = s1[index];
+		index++;
+	}
+	s1_len = index;
+	index = 0;
+	while (s2[index] != '\0')
+	{
+		pointer[s1_len + index] = s2[index];
+		index++;
+	}
+	pointer[s1_len + index] = '\0';
+	return (pointer);
+}
 
 /**
  * @brief Len of string until end or to_find
@@ -64,36 +84,15 @@ char	*ft_strjoin(char *s1, char const *s2)
 	s2_len = ft_strlen_until(s2, '\0');
 	if (s1 == NULL)
 	{
-		s1 = malloc(s2_len);
+		s1 = malloc(sizeof(char));
 		if (s1 == NULL)
 			return (NULL);
+		s1[0] = '\0';
 	}
 	pointer = malloc(ft_strlen_until(s1, '\0') + s2_len + 1);
 	if (pointer == NULL)
 		return (free(s1), NULL);
 	pointer = ft_cpy_cat(pointer, s1, s2);
 	free(s1);
-	return (pointer);
-}
-
-static char	*ft_cpy_cat(char *pointer, char const *s1, char const *s2)
-{
-	size_t	index;
-	size_t	s1_len;
-
-	index = 0;
-	while (s1[index] != '\0')
-	{
-		pointer[index] = s1[index];
-		index++;
-	}
-	s1_len = index;
-	index = 0;
-	while (s2[index] != '\0')
-	{
-		pointer[s1_len + index] = s2[index];
-		index++;
-	}
-	pointer[s1_len + index] = '\0';
 	return (pointer);
 }
