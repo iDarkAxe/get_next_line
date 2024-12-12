@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:11:02 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/05 16:26:48 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/12 13:43:32 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 
 char	*get_next_line(int fd);
 
-size_t	ft_strlen_until(const char *string, char to_find);
 char	*ft_strchr(const char *string, int searched_char);
-char	*ft_strjoin(char *s1, char const *s2);
 
 #endif

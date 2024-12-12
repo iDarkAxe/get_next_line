@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:12:58 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/11 15:05:30 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2024/12/12 13:33:37 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 
 char	*ft_filler(int fd, char *backup);
 char	*ft_make_line(char *buffer, char *backup);
+char	*ft_strjoin_gnl(char *s1, char const *s2);
 
 /**
- * @brief Get the next line of a file descriptor
+ * @brief Main function : 
+ * Get the next line of a file descriptor
  *
  * @param fd
  * @return char*
@@ -37,8 +39,9 @@ char	*get_next_line(int fd)
 }
 
 /**
- * @brief Main function that fills 'backup', and stops if \n is detected
- * after read of fixed size at compilation (default is 42 bytes)
+ * @brief Fills 'backup', stores in a buffer, 
+ * Stops if \n is detected or it there's nothing to read
+ * Read of fixed size at compilation (default is 42 bytes)
  *
  * @param fd
  * @param backup
@@ -60,7 +63,7 @@ char	*ft_filler(int fd, char *backup)
 				return (free(buffer), NULL);
 			backup[read_return] = '\0';
 		}
-		buffer = ft_strjoin(buffer, backup);
+		buffer = ft_strjoin_gnl(buffer, backup);
 		if (buffer == NULL)
 			return (NULL);
 		backup[0] = '\0';
@@ -79,27 +82,91 @@ char	*ft_filler(int fd, char *backup)
  */
 char	*ft_make_line(char *buffer, char *backup)
 {
-	size_t	i;
+	size_t	index;
 	size_t	j;
 	char	*line;
 
-	i = 0;
-	while (buffer[i] != '\0' && buffer[i] != '\n')
-		i++;
-	line = malloc(sizeof(char) * (i + 2));
+	index = 0;
+	while (buffer[index] != '\0' && buffer[index] != '\n')
+		index++;
+	line = malloc(sizeof(char) * (index + 2));
 	if (!line)
 		return (free(buffer), NULL);
 	j = 0;
-	while (j <= i)
+	while (j <= index)
 	{
 		line[j] = buffer[j];
 		j++;
 	}
 	line[j] = '\0';
-	i = 0;
+	index = 0;
 	while (buffer[j] != '\0')
-		backup[i++] = buffer[j++];
-	backup[i] = '\0';
+		backup[index++] = buffer[j++];
+	backup[index] = '\0';
 	free(buffer);
 	return (line);
+}
+
+/**
+ * @brief Copies s1 in a new array and concatenates s2
+ * 
+ * @param pointer 
+ * @param s1 
+ * @param s2 
+ * @return char* 
+ */
+static char	*ft_cpy_cat_gnl(char *pointer, char const *s1, char const *s2)
+{
+	size_t	index;
+	size_t	s1_len;
+
+	index = 0;
+	while (s1[index] != '\0')
+	{
+		pointer[index] = s1[index];
+		index++;
+	}
+	s1_len = index;
+	index = 0;
+	while (s2[index] != '\0')
+	{
+		pointer[s1_len + index] = s2[index];
+		index++;
+	}
+	pointer[s1_len + index] = '\0';
+	return (pointer);
+}
+
+/**
+ * @brief Modified strjoin to work with GNL
+ * 
+ * @param s1 
+ * @param s2 
+ * @return char* 
+ */
+char	*ft_strjoin_gnl(char *s1, char const *s2)
+{
+	char	*pointer;
+	size_t	s2_len;
+	size_t	s1_len;
+
+	s2_len = 0;
+	while (s2[s2_len] != '\0')
+		s2_len++;
+	if (s1 == NULL)
+	{
+		s1 = malloc(sizeof(char));
+		if (s1 == NULL)
+			return (NULL);
+		s1[0] = '\0';
+	}
+	s1_len = 0;
+	while (s1[s1_len] != '\0')
+		s1_len++;
+	pointer = malloc(s1_len + s2_len + 1);
+	if (pointer == NULL)
+		return (free(s1), NULL);
+	pointer = ft_cpy_cat_gnl(pointer, s1, s2);
+	free(s1);
+	return (pointer);
 }
