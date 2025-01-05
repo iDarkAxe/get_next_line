@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:12:58 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/12 13:33:37 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2025/01/05 13:45:20 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ char	*ft_strjoin_gnl(char *s1, char const *s2);
 /**
  * @brief Main function : 
  * Get the next line of a file descriptor
+ * Stops if \n is detected or it there's nothing to read
+ * /!\ Needs to be freed after use
  *
- * @param fd
- * @return char*
+ * @param fd File descriptor
+ * @return char* Next line of the file
  */
 char	*get_next_line(int fd)
 {
@@ -43,9 +45,9 @@ char	*get_next_line(int fd)
  * Stops if \n is detected or it there's nothing to read
  * Read of fixed size at compilation (default is 42 bytes)
  *
- * @param fd
- * @param backup
- * @return char*
+ * @param fd File descriptor
+ * @param backup Backup of the buffer
+ * @return char* Next line of the file
  */
 char	*ft_filler(int fd, char *backup)
 {
@@ -77,8 +79,9 @@ char	*ft_filler(int fd, char *backup)
  * @brief Build a new array containing the new line
  * and stores the rest of buffer into backup
  *
- * @param save
- * @return char*
+ * @param buffer Buffer to extract the line from
+ * @param backup Rest of the buffer
+ * @return char* Array containing the new line
  */
 char	*ft_make_line(char *buffer, char *backup)
 {
@@ -110,10 +113,10 @@ char	*ft_make_line(char *buffer, char *backup)
 /**
  * @brief Copies s1 in a new array and concatenates s2
  * 
- * @param pointer 
- * @param s1 
- * @param s2 
- * @return char* 
+ * @param pointer String to copy in
+ * @param s1 First array to copy from
+ * @param s2 Second array to concatenate
+ * @return char* Array containing s1 and s2
  */
 static char	*ft_cpy_cat_gnl(char *pointer, char const *s1, char const *s2)
 {
@@ -140,9 +143,9 @@ static char	*ft_cpy_cat_gnl(char *pointer, char const *s1, char const *s2)
 /**
  * @brief Modified strjoin to work with GNL
  * 
- * @param s1 
- * @param s2 
- * @return char* 
+ * @param s1 First array to copy from
+ * @param s2 Second array to concatenate
+ * @return char* Array containing s1 and s2
  */
 char	*ft_strjoin_gnl(char *s1, char const *s2)
 {

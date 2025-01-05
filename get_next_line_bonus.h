@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:11:02 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/12 13:43:32 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2025/01/05 13:52:00 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 #  define MAX_FD 1024
 # endif
 
-char	*get_next_line(int fd);
+char		*get_next_line(int fd);
 
-char	*ft_strchr(const char *string, int searched_char);
+const char	*ft_strchr(const char *string, int searched_char);
 
 #endif
