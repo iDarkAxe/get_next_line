@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:09:19 by ppontet           #+#    #+#             */
-/*   Updated: 2024/12/12 13:44:23 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 16:24:23 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ char	*ft_make_line(char *buffer, char *backup);
 char	*ft_strjoin_gnl(char *s1, char const *s2);
 
 /**
- * @brief Get the next line of a file descriptor
+ * @brief Main function : 
+ * Get the next line of a file descriptor
+ * Stops if '\'n is detected or it there's nothing to read
+ * /!\ Needs to be freed after use
  *
- * @param fd
- * @return char*
+ * @param fd File descriptor
+ * @return char* Next line of the file
  */
 char	*get_next_line(int fd)
 {
@@ -33,18 +36,18 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = ft_filler(fd, backup[fd]);
 	if (line == NULL || line[0] == '\0')
-		return (free(line), NULL);
+		return ((void)free(line), NULL);
 	return (line);
 }
 
 /**
  * @brief Fills 'backup', stores in a buffer, 
- * Stops if \n is detected or it there's nothing to read
+ * Stops if '\'n is detected or it there's nothing to read
  * Read of fixed size at compilation (default is 42 bytes)
  *
- * @param fd
- * @param backup
- * @return char*
+ * @param fd File descriptor
+ * @param backup Backup of the buffer
+ * @return char* Next line of the file
  */
 char	*ft_filler(int fd, char *backup)
 {
@@ -59,7 +62,7 @@ char	*ft_filler(int fd, char *backup)
 		{
 			read_return = read(fd, backup, BUFFER_SIZE);
 			if (read_return < 0)
-				return (free(buffer), NULL);
+				return ((void)free(buffer), NULL);
 			backup[read_return] = '\0';
 		}
 		buffer = ft_strjoin_gnl(buffer, backup);
@@ -76,8 +79,9 @@ char	*ft_filler(int fd, char *backup)
  * @brief Build a new array containing the new line
  * and stores the rest of buffer into backup
  *
- * @param save
- * @return char*
+ * @param buffer Buffer to extract the line from
+ * @param backup Rest of the buffer
+ * @return char* Array containing the new line
  */
 char	*ft_make_line(char *buffer, char *backup)
 {
@@ -90,7 +94,7 @@ char	*ft_make_line(char *buffer, char *backup)
 		index++;
 	line = malloc(sizeof(char) * (index + 2));
 	if (!line)
-		return (free(buffer), NULL);
+		return ((void)free(buffer), NULL);
 	j = 0;
 	while (j <= index)
 	{
@@ -109,10 +113,10 @@ char	*ft_make_line(char *buffer, char *backup)
 /**
  * @brief Copies s1 in a new array and concatenates s2
  * 
- * @param pointer 
- * @param s1 
- * @param s2 
- * @return char* 
+ * @param pointer String to copy in
+ * @param s1 First array to copy from
+ * @param s2 Second array to concatenate
+ * @return char* Array containing s1 and s2
  */
 static char	*ft_cpy_cat_gnl(char *pointer, char const *s1, char const *s2)
 {
@@ -139,9 +143,9 @@ static char	*ft_cpy_cat_gnl(char *pointer, char const *s1, char const *s2)
 /**
  * @brief Modified strjoin to work with GNL
  * 
- * @param s1 
- * @param s2 
- * @return char* 
+ * @param s1 First array to copy from
+ * @param s2 Second array to concatenate
+ * @return char* Array containing s1 and s2
  */
 char	*ft_strjoin_gnl(char *s1, char const *s2)
 {
@@ -164,7 +168,7 @@ char	*ft_strjoin_gnl(char *s1, char const *s2)
 		s1_len++;
 	pointer = malloc(s1_len + s2_len + 1);
 	if (pointer == NULL)
-		return (free(s1), NULL);
+		return ((void)free(s1), NULL);
 	pointer = ft_cpy_cat_gnl(pointer, s1, s2);
 	free(s1);
 	return (pointer);

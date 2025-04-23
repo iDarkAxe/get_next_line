@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:12:58 by ppontet           #+#    #+#             */
-/*   Updated: 2025/01/05 13:45:20 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 16:22:18 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strjoin_gnl(char *s1, char const *s2);
 /**
  * @brief Main function : 
  * Get the next line of a file descriptor
- * Stops if \n is detected or it there's nothing to read
+ * Stops if '\'n is detected or it there's nothing to read
  * /!\ Needs to be freed after use
  *
  * @param fd File descriptor
@@ -36,13 +36,13 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = ft_filler(fd, backup);
 	if (line == NULL || line[0] == '\0')
-		return (free(line), NULL);
+		return ((void)free(line), NULL);
 	return (line);
 }
 
 /**
  * @brief Fills 'backup', stores in a buffer, 
- * Stops if \n is detected or it there's nothing to read
+ * Stops if '\'n is detected or it there's nothing to read
  * Read of fixed size at compilation (default is 42 bytes)
  *
  * @param fd File descriptor
@@ -62,7 +62,7 @@ char	*ft_filler(int fd, char *backup)
 		{
 			read_return = read(fd, backup, BUFFER_SIZE);
 			if (read_return < 0)
-				return (free(buffer), NULL);
+				return ((void)free(buffer), NULL);
 			backup[read_return] = '\0';
 		}
 		buffer = ft_strjoin_gnl(buffer, backup);
@@ -94,7 +94,7 @@ char	*ft_make_line(char *buffer, char *backup)
 		index++;
 	line = malloc(sizeof(char) * (index + 2));
 	if (!line)
-		return (free(buffer), NULL);
+		return ((void)free(buffer), NULL);
 	j = 0;
 	while (j <= index)
 	{
@@ -168,7 +168,7 @@ char	*ft_strjoin_gnl(char *s1, char const *s2)
 		s1_len++;
 	pointer = malloc(s1_len + s2_len + 1);
 	if (pointer == NULL)
-		return (free(s1), NULL);
+		return ((void)free(s1), NULL);
 	pointer = ft_cpy_cat_gnl(pointer, s1, s2);
 	free(s1);
 	return (pointer);
