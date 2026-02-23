@@ -6,7 +6,7 @@
 /*   By: ppontet <ppontet@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:11:02 by ppontet           #+#    #+#             */
-/*   Updated: 2025/01/05 13:52:00 by ppontet          ###   ########lyon.fr   */
+/*   Updated: 2026/02/23 16:06:52 by ppontet          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,5 @@
 # endif
 
 char		*get_next_line(int fd);
-
-const char	*ft_strchr(const char *string, int searched_char);
 
 #endif

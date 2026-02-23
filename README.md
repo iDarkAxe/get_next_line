@@ -6,6 +6,7 @@ A library to read a file descriptor, line by line, and storing the rest of "too 
 
 * [How does it work](#howitwork-en)
 * [🚀 How to use `get_next_line()`](#usage-en)
+* [⚙️ Requirements](#requirements-en)
 
 ## <a name="howitwork-en">How does it work ##
 
@@ -30,6 +31,11 @@ if (ptr != NULL)
 For the bonus version, you can read multiple `FDs` without loosing track of the position in the file.
 If you are using multiple call of get_next_line() with the standard version, all the characters will be shuffled from multiple backup of all files.
 
+## <a name="requirements-en">⚙️ Requirements ##
+
+You need to have `libft.h` in your include path, and compile with the `libft` in lib path ([see Repo](https://github.com/iDarkAxe/Libft/)).
+The files `get_next_line_utils.c` and `get_next_line_utils_bonus.c` are only for decoration.
+
 ---
 
 ## Lecteur de descripteur de fichier, ligne par ligne ##
@@ -40,6 +46,7 @@ Bibliothèque pour lire un decripteur de fichier, ligne par ligne, en stockant l
 
 * [📖 Comment ça marche ?](#howitwork-fr)
 * [🚀 Comment utiliser la fonction `get_next_line()`](#usage-fr)
+* [⚙️ Pré-requis](#requirements-fr)
 
 ## <a name="howitwork-fr">📖 Comment ça marche ? ##
 
@@ -63,3 +70,8 @@ if (ptr != NULL)
 
 Pour la version bonus, la fonction est capable de lire divers `FDs` sans perdre la trace de la postion dans le fichier.
 Si vous utiliser de multiples appels de la fonction get_next_line() en version standard, les caractères restants seront mélangés avec les caractères restands des autres descripteurs de fichier sans distinctions.
+
+## <a name="requirements-fr">⚙️ Pré-requis ##
+
+Il est nécessaire de d'avoir `libft.h` dans son chemin des includes, et de compiler avec la `libft` dans son chemin des bibliothèques ([voir Repo](https://github.com/iDarkAxe/Libft/)).
+Les fichiers `get_next_line_utils.c` et `get_next_line_utils_bonus.c` sont là uniquement pour la décoration.
